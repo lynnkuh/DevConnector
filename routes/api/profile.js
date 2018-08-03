@@ -4,10 +4,13 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 
+
 // Load Profile Model
 const Profile = require('../../models/Profile');
 //Load User Model
 const User = require('../../models/User');
+// Load Validation
+const validateProfileInput = require('../../validation/profile');
 
 // @route GET api/profile/test
 // @desc Tests the profile route
@@ -42,6 +45,14 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false}),
   (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    //Check Validation
+    if (!isValid) {
+      // Return any errors with 400 status
+      return res.status(400).json(errors);
+    }
+
     // Get profile fields
     const profileFields = {};
     profileFields.user = req.user.id;
@@ -82,11 +93,11 @@ router.post(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
-        ).then (profile => req.json(profile));
+        ).then (profile => res.json(profile));
       } else {
         // Check if handle exists
         Profile.findOne({ handle: profileFields.handle })
-        .then() (profile => {
+        .then (profile => {
           if (profile) {
             errors.handle = 'That handle already exists';
             res.status(400).json(errors);
