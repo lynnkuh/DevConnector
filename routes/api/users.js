@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 const validationRegisterInput = require('../../validation/register');
+const validationLoginInput = require('../../validation/login');
 
 const router = express.Router();
 
@@ -32,6 +33,12 @@ false}), (req, res) =>  {
 // @desc Login User
 // @access Public
 router.post('/login', (req, res) => {
+  const {errors, isValid} = validationLoginInput(req.body)
+
+  // check for validation
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
   const email = req.body.email;
   const password = req.body.password;
 
@@ -39,7 +46,8 @@ router.post('/login', (req, res) => {
   User.findOne({email})
   .then(user => {
     if(!user) {
-      return res.status(404).json({email: 'User not found'});
+      errors.email = 'User not found';
+      return res.status(404).json(errors);
     }
 
     // check password
@@ -64,8 +72,9 @@ router.post('/login', (req, res) => {
         }
       )
       } else {
+        errors.password = 'Password does not match';
         return res.status(400)
-        .json({password: 'Password does not match.'});
+        .json(errors);
       }
     })
 
