@@ -99,7 +99,7 @@ router.post(
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
     if(req.body.company) profileFields.company =
-    profile.body.company;
+    req.body.company;
     if (req.body.website) profileFields.website =
     req.body.website;
     if (req.body.location) profileFields.location =
@@ -177,9 +177,10 @@ router.post(
         current: req.body.current,
         description: req.body.description
       };
-
+      console.log(newExp);
       // Add to exp array
-      profile.experience.unshift(newExp);
+    //  profile.experience.unshift(newExp);
+        profile.experience.push(newExp);
 
       profile.save().then(profile => res.json(profile));
     });
@@ -212,6 +213,7 @@ router.post(
         description: req.body.description
       };
 
+      console.log(newEdu);
       // Add to exp array
       profile.education.unshift(newEdu);
 
