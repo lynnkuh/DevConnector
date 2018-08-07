@@ -64,6 +64,8 @@ router.post(
       text: req.body.text,
       name: req.body.name,
       avatar: req.body.avatar,
+      video: req.body.video,
+      image: req.body.image,
       user: req.user.id
     });
 
@@ -207,5 +209,84 @@ router.delete(
     })
   }
 )
+
+// @route POST api/posts/video/:id
+// @desc Add a video to post
+// @access Private
+router.post(
+  '/video/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // If any errors, send 400 with errors object
+      console.log(isValid);
+      return res.status(404).json(errors);
+    }
+
+    Post.findById(req.params.id)
+      .then(post => {
+        const newVideo = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          video: req.body.video,
+          user: req.user.id
+        };
+
+        // Add to comments array
+        post.video.unshift(newVideo);
+
+        // Save
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ videonotfound: 'Video not found'}));
+  }
+);
+
+// @route GET api/posts/video
+// @desc Tests the getting a video
+// @access Public
+router.get('/posts/video', passport.authenticate('jwt', {session:
+  false}), (req, res) =>  {
+    res.json({
+      text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          video: req.body,video,
+          image: req.body.image,
+          user: req.user.id,
+    });
+  });
+
+// @route DELETE api/posts/video/:id/:video_id
+// @desc delete a video from post
+// @access Private
+router.delete(
+  '/video/:id/:video_id',
+  (req, res) => {
+    Post.findById(req.params.id)
+    .then(post => {
+      // Check to see if video exists
+      if (
+        post.video.filter( video => video._id.toString() === req.params.video_id)
+      ) {
+        return res.status(404).json({ videonotexists: 'Video does not exist'});
+      }
+
+      // Get move index
+      const removeIndex = post.video.map(item => item._id.toString()).indexOf(req.params.video_id);
+
+      // Splice video out of array
+      post.video.splice(removeIndex, 1);
+
+      post.save().then(post => res.json(post));
+    })
+  }
+)
+
+
 
 module.exports = router;
