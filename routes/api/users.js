@@ -113,7 +113,7 @@ router.post('/register', (req, res) => {
       bcrypt.genSalt(10, (err, salt) => { 
         if (err) throw err; //Failed generating salt
         bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw Error; //failed hashing
+          if (err) throw err; //failed hashing
           newUser.password = hash;
           newUser.save()
           .then (user => res.json(user))

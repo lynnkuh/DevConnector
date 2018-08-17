@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import classnames from 'classnames';
 
 class Register extends Component {
   constructor() {
@@ -38,6 +39,11 @@ class Register extends Component {
   }
 
   render() {
+
+    // deconstruct this.state.errors
+
+    const { errors } = this.state;
+
     return (
        <div className="register">
     <div className="container">
@@ -45,11 +51,18 @@ class Register extends Component {
         <div className="col-md-8 m-auto">
           <h1 className="display-4 text-center">Sign Up</h1>
           <p className="lead text-center">Create your DevConnector account</p>
-          <form onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Name" name="name" onChange={this.onChange.bind(this)}
-              value ={this.state.name} 
+          <form noValidate onSubmit={this.onSubmit}>
+          <div className="form-group">
+              <input type="text" 
+              className={classnames('form-control form-control-lg', 
+              {'is-invalid': errors.name})} 
+              placeholder="Name" name="name"
+              value={this.state.name}
+              onChange={this.onChange.bind(this)}
               required />
+              {errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
             </div>
             <div className="form-group">
               <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email"
