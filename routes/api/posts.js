@@ -120,7 +120,7 @@ router.post(
   
 });
 
-// @route POSt api/posts/unlike/:id
+// @route POST api/posts/unlike/:id
 // @desc Unlike post
 // @access Private
 router.post(
