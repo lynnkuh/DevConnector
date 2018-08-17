@@ -65,20 +65,32 @@ class Register extends Component {
               )}
             </div>
             <div className="form-group">
-              <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email"
+              <input type="email"  className={classnames('form-control form-control-lg', 
+              {'is-invalid': errors.email})}  placeholder="Email Address" name="email"
                onChange={this.onChange.bind(this)}
               value ={this.state.email} />
               <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
+              {errors.name && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
             <div className="form-group">
-              <input type="password" className="form-control form-control-lg" placeholder="Password" name="password"
+              <input type="password"  className={classnames('form-control form-control-lg', 
+              {'is-invalid': errors.password})}  placeholder="Password" name="password"
                onChange={this.onChange.bind(this)}
               value = {this.state.password} />
+               {errors.name && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
             <div className="form-group">
-              <input type="password" className="form-control form-control-lg" placeholder="Confirm Password" name="password2"
+              <input type="password"  className={classnames('form-control form-control-lg', 
+              {'is-invalid': errors.password2})}  placeholder="Confirm Password" name="password2"
                onChange={this.onChange.bind(this)}
               value = {this.state.password2} />
+               {errors.name && (
+                <div className="invalid-feedback">{errors.password2}</div>
+              )}
             </div>
             <input type="submit" className="btn btn-info btn-block mt-4" />
           </form>
