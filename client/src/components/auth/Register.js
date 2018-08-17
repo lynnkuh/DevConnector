@@ -70,7 +70,7 @@ class Register extends Component {
                onChange={this.onChange.bind(this)}
               value ={this.state.email} />
               <small className="form-text text-muted">This site uses Gravatar so if you want a profile image, use a Gravatar email</small>
-              {errors.name && (
+              {errors.email && (
                 <div className="invalid-feedback">{errors.email}</div>
               )}
             </div>
@@ -79,7 +79,7 @@ class Register extends Component {
               {'is-invalid': errors.password})}  placeholder="Password" name="password"
                onChange={this.onChange.bind(this)}
               value = {this.state.password} />
-               {errors.name && (
+               {errors.password && (
                 <div className="invalid-feedback">{errors.password}</div>
               )}
             </div>
@@ -88,7 +88,7 @@ class Register extends Component {
               {'is-invalid': errors.password2})}  placeholder="Confirm Password" name="password2"
                onChange={this.onChange.bind(this)}
               value = {this.state.password2} />
-               {errors.name && (
+               {errors.password2 && (
                 <div className="invalid-feedback">{errors.password2}</div>
               )}
             </div>
